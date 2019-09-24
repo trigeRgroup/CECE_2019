@@ -1,0 +1,201 @@
+---
+title: "Exploratory data analysis"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(corrplot)
+library(DataExplorer)
+
+```
+
+
+```{r import data}
+
+ read.csv("Indian Liver Patient Dataset.csv", header = TRUE, stringsAsFactors = TRUE, sep = ",")
+
+data(mtcars)
+
+```
+
+```{r}
+# Structure of your data
+
+str(mtcars)
+
+# missing values
+
+is.na(mtcars$cyl)
+
+colSums(sapply(mtcars, is.na))
+
+mtcars <- na.omit(mtcars)
+
+```
+
+```{r column summary}
+
+mean(mtcars$cyl)
+
+max(mtcars$cyl)
+
+summary(mtcars$cyl)
+summary(mtcars)
+
+describe(mtcars$cyl)
+describe(mtcars)
+
+table(mtcars$gear)
+
+```
+
+# Manipulation of data frame
+```{r}
+
+# index search
+which(names(mtcars)=="cyl")
+which(names(mtcars)=="mpg")
+mtcars[, 1:6]
+
+# better way :)
+
+library(tidyverse)
+mtcars <- mtcars %>% as_tibble()
+select(mtcars, cyl:mpg)
+
+# select
+select(mtcars, cyl:carb) %>% filter(gear==3)
+
+# select women over 80
+select(mtcars, cyl:carb) %>% filter(vs==1 & gear > 2)
+
+```
+
+
+
+# Explore 
+
+```{r boxplot}
+
+boxplot(mtcars, col="green")
+
+boxplot(mtcars$disp, col="blue")
+
+```
+
+```{r histogram}
+
+hist(mtcars$qsec, col = "red")
+
+```
+
+```{r scatter plot}
+
+plot(mtcars$cyl, mtcars$mpg)
+
+```
+
+# Correlation
+```{r}
+
+library(corrplot)
+
+dt <- mtcars[c(2:5)]
+
+c <- cor(dt, method = "pearson")
+
+corrplot(c)
+
+
+```
+
+# 
+
+```{r}
+
+# table(mtcars$gender)
+# 
+# table(mtcars$is_patient)
+# 
+# barplot(table(mtcars$gender))
+# barplot(table(mtcars$is_patient))
+
+```
+
+
+## nicer graphics
+
+```{r}
+
+plot(mtcars$cyl, mtcars$mpg)
+
+ 
+plot(mtcars$cyl, mtcars$mpg,
+     xlab="cyl",
+     ylab="mpg")
+
+plot(mtcars$cyl, mtcars$mpg,
+     xlab="cyl",
+     ylab="mpg",
+     main="cyl vs. mpg level")
+
+ 
+plot(mtcars$cyl, mtcars$mpg,
+     xlab="cyl",
+     ylab="mpg",
+     main="cyl vs. mpg level",
+     type = "p") #p, l, b, o, h, s, S
+
+# symbol
+plot(mtcars$cyl, mtcars$mpg,
+    xlab="cyl",
+     ylab="mpg",
+     main="cyl vs. mpg level",
+     type = "p",
+     pch=15,
+     col="red")
+
+```
+
+# Tasks
+
+7. Create the mtcars6 frame from the mtcars frame, which only contains information about cars with 6 cylinders. Display table with basic statistics (for mtcars6 frame)
+
+8. Create a graph showing the relationship between the two selected parameters.
+
+9. Create a data frame containing the variables: age, tot_proteins, ag_ratio (only for men). Create a histogram for each of the variables, excluding men over 80 years of age.
+
+
+
+
+
+
+
+
+```{r}
+
+DataExplorer::plot_str(mtcars)
+
+DataExplorer::plot_histogram(mtcars$disp)
+
+DataExplorer::plot_correlation(mtcars)
+
+DataExplorer::plot_missing(mtcars)
+
+DataExplorer::plot_boxplot(mtcars, by = 5)
+
+DataExplorer::create_report(mtcars)
+
+```
+
+
+
+
+
+
+
