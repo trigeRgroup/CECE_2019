@@ -1,0 +1,61 @@
+---
+title: "patterns"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(corrplot)
+library(DataExplorer)
+
+```
+
+
+```{r import data}
+
+data_cancer <- read.csv("Indian Liver Patient Dataset.csv")
+
+```
+
+# Hierarchical cluster analysis
+
+```{r}
+
+d <- dist(x = scale(data_cancer[1:10,-c(2,11)]), method = "euclidean")
+
+hca <- hclust(d = d, method = "ward.D2")
+
+plot(hca, hang = -1)
+
+library(dendextend)
+
+dend <- as.dendrogram(hca)
+plot(dend, xlab = "Patient", leaflab = "none")
+
+
+dend %>% set("branches_k_color", k = 3) %>% plot()
+
+
+hca2 <- hclust(d = d, method = "complete")
+dend2 <- as.dendrogram(hca2)
+
+dl <- dendlist(dend, dend2)
+tanglegram(dl, sort = TRUE, common_subtrees_color_lines = TRUE, highlight_distinct_edges  = FALSE, highlight_branches_lwd = FALSE)
+
+
+
+```
+
+```{r}
+
+heatmap(as.matrix(data_cancer[,-c(2,11)]), scale = "none")
+
+library("pheatmap")
+pheatmap(mtcars)
+
+```
+
